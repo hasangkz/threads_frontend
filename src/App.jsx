@@ -11,13 +11,17 @@ function App() {
   const { pathname } = useLocation();
 
   return (
-    <Container maxW='620px'>
-      <Header />
-      <Routes>
-        <Route path='/:username' element={<UserPage />} />
-        <Route path='/:username/post/:postID' element={<PostPage />} />
-      </Routes>
-    </Container>
+    <Box position={'relative'} w='full'>
+      <Container
+        maxW={pathname === '/' ? { base: '620px', md: '900px' } : '620px'}
+      >
+        <Header />
+        <Routes>
+          <Route path='/:username' element={<UserPage />} />
+          <Route path='/:username/post/:postID' element={<PostPage />} />
+        </Routes>
+      </Container>
+    </Box>
   );
 }
 

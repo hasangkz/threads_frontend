@@ -29,6 +29,12 @@ const colors = {
     light: '#616161',
     dark: '#1e1e1e',
   },
+  white: {
+    light: '#ececec',
+  },
+  green: {
+    dark: '#42b883',
+  },
 };
 
 const theme = extendTheme({ config, styles, colors });

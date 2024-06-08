@@ -2,6 +2,7 @@
 
 body {
   margin: 0;
+  box-sizing: border-box;
   font-family: 'Barlow', sans-serif;
   font-family: 'Roboto Slab', serif;
 }
@@ -15,7 +16,7 @@ body {
 }
 
 .icon-container:hover {
-  background-color: #1e1e1e;
+  background-color: #42b883;
 }
 
 ::-webkit-scrollbar {
