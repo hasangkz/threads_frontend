@@ -1,11 +1,11 @@
 import { Avatar, Box, Flex, Link, Text, VStack } from '@chakra-ui/react';
 import { BsInstagram } from 'react-icons/bs';
 import { RiShareForwardLine } from 'react-icons/ri';
-import { useToast } from '@chakra-ui/react';
 import '../index.css';
+import useHandleToast from '../hooks/useHandleToast';
 
 const UserHeader = () => {
-  const toast = useToast();
+  const toast = useHandleToast();
 
   const handleCopyUser = () => {
     const currentUserProfileURL = window.location.href;

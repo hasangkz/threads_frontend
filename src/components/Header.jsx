@@ -9,7 +9,7 @@ const Header = () => {
         onClick={toggleColorMode}
         alt='threads-logo'
         w={8}
-        src={colorMode == 'dark' ? '/light-logo.png' : '/dark-logo.png'}
+        src={colorMode === 'dark' ? '/light-logo.png' : '/dark-logo.png'}
       />
     </Flex>
   );
