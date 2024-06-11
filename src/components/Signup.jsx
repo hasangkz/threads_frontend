@@ -14,9 +14,11 @@ import {
   useColorModeValue,
   Link,
 } from '@chakra-ui/react';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import authScreenAtom from '../atoms/authAtom';
 import { useSetRecoilState } from 'recoil';
+import useHandleToast from '../hooks/useHandleToast';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,6 +29,7 @@ const Signup = () => {
     email: '',
     password: '',
   });
+  const handleToast = useHandleToast();
 
   //   const useToast = useToast();
   //   const setUser = useSetRecoilState(userAtom);
@@ -63,12 +66,12 @@ const Signup = () => {
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'} textAlign={'center'}>
-            Sign up
+            Please Create an account!
           </Heading>
         </Stack>
         <Box
           rounded={'lg'}
-          //   bg={useColorModeValue('white', 'gray.dark')}
+          bg={useColorModeValue('white', 'gray.dark')}
           boxShadow={'lg'}
           p={10}
         >
@@ -126,7 +129,7 @@ const Signup = () => {
                       setShowPassword((showPassword) => !showPassword)
                     }
                   >
-                    {/* {showPassword ? <ViewIcon /> : <ViewOffIcon />} */}
+                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                   </Button>
                 </InputRightElement>
               </InputGroup>
@@ -138,7 +141,7 @@ const Signup = () => {
                 bg={useColorModeValue('gray.600', 'gray.700')}
                 color={'white'}
                 _hover={{
-                  bg: useColorModeValue('gray.700', 'gray.800'),
+                  bg: useColorModeValue('green.700', 'green.800'),
                 }}
                 onClick={handleSignup}
               >
@@ -146,10 +149,13 @@ const Signup = () => {
               </Button>
             </Stack>
             <Stack pt={6}>
-              <Text align={'center'}>
-                Already a user?{' '}
-                <Link color={'blue.400'} onClick={() => setAuthScreen('login')}>
-                  Login
+              <Text fontSize={'x-large'} align={'center'}>
+                Already have a account?
+                <br />
+                <Link onClick={() => setAuthScreen('login')}>
+                  <Button color={'green.600'} size='lg'>
+                    Please Login
+                  </Button>
                 </Link>
               </Text>
             </Stack>

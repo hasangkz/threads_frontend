@@ -6,7 +6,7 @@ import Signup from '../components/Signup';
 const AuthPage = () => {
   const authScreenState = useRecoilValue(authScreenAtom);
 
-  return <>{authScreenState === 'a' ? <Login /> : <Signup />}</>;
+  return <>{authScreenState === 'login' ? <Login /> : <Signup />}</>;
 };
 
 export default AuthPage;
