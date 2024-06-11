@@ -12,6 +12,7 @@ import {
   Text,
   useColorModeValue,
   Link,
+  Spinner,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
@@ -19,45 +20,32 @@ import { useSetRecoilState } from 'recoil';
 import authScreenAtom from '../atoms/authAtom';
 import useHandleToast from '../hooks/useHandleToast';
 import userAtom from '../atoms/userAtom';
+import usePostFetch from '../hooks/usePostFetch';
 
 export default function LoginCard() {
   const [showPassword, setShowPassword] = useState(false);
   const setAuthScreen = useSetRecoilState(authScreenAtom);
   const setUser = useSetRecoilState(userAtom);
-  const [loading, setLoading] = useState(false);
-
-  const [inputs, setInputs] = useState({
+  const [input, setInput] = useState({
     username: '',
     password: '',
   });
-  const showToast = useHandleToast();
-  // const handleLogin = async () => {
 
-  // 	setLoading(true);
-  // 	try {
-  // 		const res = await fetch("/api/users/login", {
-  // 			method: "POST",
-  // 			headers: {
-  // 				"Content-Type": "application/json",
-  // 			},
-  // 			body: JSON.stringify(inputs),
-  // 		});
-  // 		const data = await res.json();
-  // 		if (data.error) {
-  // 			showToast("Error", data.error, "error");
-  // 			return;
-  // 		}
-  // 		localStorage.setItem("user-threads", JSON.stringify(data));
-  // 		setUser(data);
-  // 	} catch (error) {
-  // 		showToast("Error", error, "error");
-  // 	} finally {
-  // 		setLoading(false);
-  // 	}
-  // };
+  const { loading, error, postData } = usePostFetch('/api/users/login', input);
 
-  const handleLogin = () => {
-    console.log('inputs', inputs);
+  const handleToast = useHandleToast();
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const data = await postData(input);
+
+    if (data) {
+      localStorage.setItem('user', JSON.stringify(data));
+      setUser(data);
+      handleToast('Success', 'Welcome back to Threads!', 'success');
+    } else if (error) {
+      handleToast('Error', error, 'error');
+      return;
+    }
   };
 
   return (
@@ -79,28 +67,30 @@ export default function LoginCard() {
           }}
         >
           <Stack spacing={4}>
-            <FormControl isRequired>
+            <FormControl isRequired={true}>
               <FormLabel>Username</FormLabel>
               <Input
+                required={true}
                 type='text'
-                value={inputs.username}
+                value={input.username}
                 onChange={(e) =>
-                  setInputs((inputs) => ({
-                    ...inputs,
+                  setInput((input) => ({
+                    ...input,
                     username: e.target.value,
                   }))
                 }
               />
             </FormControl>
-            <FormControl isRequired>
+            <FormControl isRequired={true}>
               <FormLabel>Password</FormLabel>
               <InputGroup>
                 <Input
+                  required={true}
                   type={showPassword ? 'text' : 'password'}
-                  value={inputs.password}
+                  value={input.password}
                   onChange={(e) =>
-                    setInputs((inputs) => ({
-                      ...inputs,
+                    setInput((input) => ({
+                      ...input,
                       password: e.target.value,
                     }))
                   }
@@ -118,19 +108,29 @@ export default function LoginCard() {
               </InputGroup>
             </FormControl>
             <Stack spacing={10} pt={2}>
-              <Button
-                loadingText='Logging in'
-                size='lg'
-                bg={useColorModeValue('gray.600', 'gray.700')}
-                color={'white'}
-                _hover={{
-                  bg: useColorModeValue('green.700', 'green.800'),
-                }}
-                onClick={handleLogin}
-                isLoading={loading}
-              >
-                Login
-              </Button>
+              {loading ? (
+                <>
+                  <Spinner />
+                </>
+              ) : (
+                <>
+                  <Button
+                    loadingText='Logging in'
+                    size='lg'
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    bg={useColorModeValue('gray.600', 'gray.700')}
+                    color={'white'}
+                    _hover={{
+                      // eslint-disable-next-line react-hooks/rules-of-hooks
+                      bg: useColorModeValue('green.700', 'green.800'),
+                    }}
+                    onClick={handleLogin}
+                    isLoading={loading}
+                  >
+                    Login
+                  </Button>
+                </>
+              )}
             </Stack>
             <Stack pt={6}>
               <Text fontSize={'x-large'} align={'center'}>
@@ -138,7 +138,7 @@ export default function LoginCard() {
                 <br />
                 <Link onClick={() => setAuthScreen('signup')}>
                   <Button color={'green.600'} size='lg'>
-                    Please Login
+                    Create an account
                   </Button>
                 </Link>
               </Text>
