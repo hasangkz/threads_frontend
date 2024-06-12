@@ -7,6 +7,7 @@ import PostPage from './pages/PostPage';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import AuthPage from './pages/AuthPage';
+import UpdatePage from './pages/UpdatePage';
 
 function App() {
   const user = useRecoilValue(userAtom);
@@ -30,7 +31,14 @@ function App() {
             path='/auth'
             element={!user ? <AuthPage /> : <Navigate to='/' />}
           />
+
+          <Route
+            path='/update'
+            element={user ? <UpdatePage /> : <Navigate to='/' />}
+          />
+
           <Route path='/:username' element={<UserPage />} />
+
           <Route path='/:username/post/:postID' element={<PostPage />} />
         </Routes>
       </Container>

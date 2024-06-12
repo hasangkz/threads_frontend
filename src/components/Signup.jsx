@@ -99,6 +99,7 @@ const Signup = () => {
               <FormLabel>Email address</FormLabel>
               <Input
                 type='email'
+                placeholder='your-email@example.com'
                 onChange={(e) => setInput({ ...input, email: e.target.value })}
                 value={input.email}
               />
