@@ -6,12 +6,10 @@ import usePostFetch from './usePostFetch';
 const useLogout = () => {
   const setUser = useSetRecoilState(userAtom);
   const handleToast = useHandleToast();
-  const { error, postData } = usePostFetch('/api/users/logout');
+  const { error, postData } = usePostFetch();
 
   const logout = async () => {
-    const data = await postData();
-
-    console.log('data', data);
+    const data = await postData('/api/users/logout');
 
     if (data) {
       localStorage.removeItem('user');

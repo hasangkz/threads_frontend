@@ -14,7 +14,6 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { motion, useAnimate } from 'framer-motion';
 
 const RepostSVG = () => {
   return (

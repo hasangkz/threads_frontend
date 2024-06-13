@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
-const usePostFetch = () => {
+const useFollow = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const postData = async (url, input) => {
+  const follow = async (url, input) => {
     setLoading(true);
     try {
       const response = await fetch(url, {
@@ -18,6 +18,7 @@ const usePostFetch = () => {
       if (result?.error) {
         throw new Error(result?.error);
       }
+
       return result;
     } catch (err) {
       setError(err?.message || err?.error);
@@ -25,8 +26,7 @@ const usePostFetch = () => {
       setLoading(false);
     }
   };
-
-  return { loading, error, postData };
+  return { loading, error, follow };
 };
 
-export default usePostFetch;
+export default useFollow;

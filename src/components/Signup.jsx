@@ -34,11 +34,11 @@ const Signup = () => {
     email: '',
     password: '',
   });
-  const { loading, error, postData } = usePostFetch('/api/users/signup', input);
+  const { loading, error, postData } = usePostFetch();
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    const data = await postData(input);
+    const data = await postData('/api/users/signup', input);
 
     if (data) {
       localStorage.setItem('user', JSON.stringify(data));
@@ -128,7 +128,9 @@ const Signup = () => {
             </FormControl>
             {loading ? (
               <>
-                <Spinner />
+                <Flex justifyContent={'center'}>
+                  <Spinner size={'xl'} />
+                </Flex>
               </>
             ) : (
               <>

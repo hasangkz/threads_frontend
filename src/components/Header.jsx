@@ -34,9 +34,14 @@ const Header = () => {
   return (
     <Flex justifyContent={'space-between'} mt={6} mb='12'>
       {user && (
-        <Link as={RouterLink} to='/'>
-          <TiHome size={30} />
-        </Link>
+        <Flex alignItems={'center'} gap={4}>
+          <Link as={RouterLink} to='/'>
+            <TiHome size={30} />
+          </Link>
+          <Link as={RouterLink} to={`/${user.username}`}>
+            <CgProfile size={30} />
+          </Link>
+        </Flex>
       )}
       {!user && (
         <Link as={RouterLink} to={'/auth'} onClick={handleAuthValue}>
@@ -56,15 +61,9 @@ const Header = () => {
 
       {user && (
         <Flex alignItems={'center'} gap={4}>
-          <Link as={RouterLink} to={`/${user.username}`}>
-            <CgProfile size={30} />
-          </Link>
           <Link as={RouterLink} to={`/chat`}>
             <LuMessageSquare size={30} />
           </Link>
-          {/* <Link as={RouterLink} to={`/settings`}>
-            <MdOutlineSettings size={30} />
-          </Link> */}
           <Button size={'xs'} onClick={handleLogout}>
             <FiLogOut size={30} />
           </Button>

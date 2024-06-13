@@ -1,19 +1,18 @@
 import { useState } from 'react';
 
-const useGetFetch = () => {
+const useDeleteFetch = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const getData = async (url) => {
+  const deleteData = async (url) => {
     try {
       const response = await fetch(url, {
-        method: 'GET',
+        method: 'DELETE',
       });
       const result = await response.json();
       if (result?.error) {
         throw new Error(result?.error);
       }
-      console.log('getResult => ', result);
       return result;
     } catch (error) {
       setError(error?.message || error?.error);
@@ -22,7 +21,7 @@ const useGetFetch = () => {
     }
   };
 
-  return { getData, loading, error };
+  return { deleteData, loading, error };
 };
 
-export default useGetFetch;
+export default useDeleteFetch;

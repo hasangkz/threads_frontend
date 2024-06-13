@@ -40,7 +40,10 @@ const UpdatePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = await postData({ ...input, profilePic: imgUrl });
+    const data = await postData(`/api/users/update/${user._id}`, {
+      ...input,
+      profilePic: imgUrl,
+    });
 
     if (data) {
       localStorage.setItem('user', JSON.stringify(data?.user));
@@ -140,7 +143,9 @@ const UpdatePage = () => {
           </FormControl>
           {loading ? (
             <>
-              <Spinner />
+              <Flex justifyContent={'center'}>
+                <Spinner size={'xl'} />
+              </Flex>
             </>
           ) : (
             <>

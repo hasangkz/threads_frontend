@@ -31,12 +31,12 @@ export default function LoginCard() {
     password: '',
   });
 
-  const { loading, error, postData } = usePostFetch('/api/users/login', input);
+  const { loading, error, postData } = usePostFetch();
 
   const handleToast = useHandleToast();
   const handleLogin = async (e) => {
     e.preventDefault();
-    const data = await postData(input);
+    const data = await postData('/api/users/login', input);
 
     if (data) {
       localStorage.setItem('user', JSON.stringify(data));
@@ -110,7 +110,9 @@ export default function LoginCard() {
             <Stack spacing={10} pt={2}>
               {loading ? (
                 <>
-                  <Spinner />
+                  <Flex justifyContent={'center'}>
+                    <Spinner size={'xl'} />
+                  </Flex>
                 </>
               ) : (
                 <>

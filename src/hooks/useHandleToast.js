@@ -7,6 +7,7 @@ const useHandleToast = () => {
   const showToast = useCallback(
     (title, description, status) => {
       toast({
+        variant: 'top-accent',
         title,
         description,
         status,
