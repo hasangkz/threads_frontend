@@ -3,12 +3,12 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import userAtom from './atoms/userAtom';
 import { useRecoilValue } from 'recoil';
 import UserPage from './pages/UserPage';
-import PostPage from './pages/PostPage';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import AuthPage from './pages/AuthPage';
 import UpdatePage from './pages/UpdatePage';
 import CreatePost from './components/CreatePost';
+import PostDetailPage from './pages/PostDetailPage';
 
 function App() {
   const user = useRecoilValue(userAtom);
@@ -52,7 +52,7 @@ function App() {
             }
           />
 
-          <Route path='/:username/post/:postID' element={<PostPage />} />
+          <Route path='/:username/post/:postID' element={<PostDetailPage />} />
         </Routes>
       </Container>
     </Box>

@@ -15,6 +15,7 @@ const usePostFetch = () => {
         body: input ? JSON.stringify(input) : undefined,
       });
       const result = await response.json();
+      console.log('result', result);
       if (result?.error) {
         throw new Error(result?.error);
       }

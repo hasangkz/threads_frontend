@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import useHandleToast from './useHandleToast';
+import { useParams } from 'react-router-dom';
 
-const useGetUserProfile = (username) => {
+const useGetUserProfile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const handleToast = useHandleToast();
+  const { username } = useParams();
 
   useEffect(() => {
     const getUser = async () => {
@@ -13,6 +15,7 @@ const useGetUserProfile = (username) => {
           method: 'GET',
         });
         const result = await res.json();
+        console.log('result', result);
         if (result.error) {
           handleToast('Error', result.error, 'error');
           return;

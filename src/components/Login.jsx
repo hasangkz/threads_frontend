@@ -34,8 +34,7 @@ export default function LoginCard() {
   const { loading, error, postData } = usePostFetch();
 
   const handleToast = useHandleToast();
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async () => {
     const data = await postData('/api/users/login', input);
 
     if (data) {

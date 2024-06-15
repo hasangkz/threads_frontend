@@ -10,10 +10,10 @@ import useHandleToast from '../hooks/useHandleToast';
 import useGetUserProfile from '../hooks/useGetUserProfile';
 import userAtom from '../atoms/userAtom';
 const UserPage = () => {
-  const { loading, error, getData } = useGetFetch();
   const [posts, setPosts] = useRecoilState(postsAtom);
+  const { loading, error, getData } = useGetFetch();
   const { username } = useParams();
-  const { user, loading: userLoading } = useGetUserProfile(username);
+  const { user, loading: userLoading } = useGetUserProfile();
   const handleToast = useHandleToast();
   const currentUser = useRecoilValue(userAtom);
 
@@ -54,6 +54,7 @@ const UserPage = () => {
   return (
     <>
       <UserHeader user={user} />
+      <br />
       {posts?.length === 0 ? (
         <Flex justifyContent={'center'} mt={10}>
           {currentUser?._id === user._id ? (

@@ -36,11 +36,10 @@ const UpdatePage = () => {
 
   const handleToast = useHandleToast();
 
-  const { loading, error, postData } = usePutFetch();
+  const { loading, error, putData } = usePutFetch();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const data = await postData(`/api/users/update/${user._id}`, {
+  const handleSubmit = async () => {
+    const data = await putData(`/api/users/update/${user._id}`, {
       ...input,
       profilePic: imgUrl,
     });

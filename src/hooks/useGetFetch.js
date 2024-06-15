@@ -13,7 +13,6 @@ const useGetFetch = () => {
       if (result?.error) {
         throw new Error(result?.error);
       }
-      console.log('getResult => ', result);
       return result;
     } catch (error) {
       setError(error?.message || error?.error);

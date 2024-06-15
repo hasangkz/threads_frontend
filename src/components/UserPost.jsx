@@ -28,12 +28,11 @@ const UserPost = ({ post, postedBy, posts, setPosts }) => {
     error: deleteError,
     deleteData,
   } = useDeleteFetch();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [user, setUser] = useState(null);
   const handleToast = useHandleToast();
   const currentUser = useRecoilValue(userAtom);
   const navigate = useNavigate();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
 
   useEffect(() => {
@@ -104,47 +103,48 @@ const UserPost = ({ post, postedBy, posts, setPosts }) => {
                 navigate(`/${user.username}`);
               }}
             />
-            <Box w='1px' h={'full'} bg='gray.light' my={2}></Box>
-            <Box position={'relative'} w={'full'}>
-              {post?.replies?.length === 0 && (
-                <Text textAlign={'center'}>🥱</Text>
-              )}
-              {post?.replies[0] && (
-                <Avatar
-                  size='xs'
-                  name='User'
-                  src={post?.replies[0].userProfilePic}
-                  position={'absolute'}
-                  top={'0px'}
-                  left='15px'
-                  padding={'2px'}
-                />
-              )}
+            {post?.replies?.length > 0 && (
+              <>
+                <Box w='1px' h={'full'} bg='gray.light' my={2}></Box>
+                <Box position={'relative'} w={'full'}>
+                  {post?.replies[0] && (
+                    <Avatar
+                      size='xs'
+                      name='User'
+                      src={post?.replies[0].userProfilePic}
+                      position={'absolute'}
+                      top={'0px'}
+                      left='12px'
+                      padding={'2px'}
+                    />
+                  )}
 
-              {post?.replies[1] && (
-                <Avatar
-                  size='xs'
-                  name='User'
-                  src={post?.replies[1].userProfilePic}
-                  position={'absolute'}
-                  bottom={'0px'}
-                  right='-5px'
-                  padding={'2px'}
-                />
-              )}
+                  {post?.replies[1] && (
+                    <Avatar
+                      size='xs'
+                      name='User'
+                      src={post?.replies[1].userProfilePic}
+                      position={'absolute'}
+                      bottom={'0px'}
+                      right='-5px'
+                      padding={'2px'}
+                    />
+                  )}
 
-              {post?.replies[2] && (
-                <Avatar
-                  size='xs'
-                  name='User'
-                  src={post?.replies[2].userProfilePic}
-                  position={'absolute'}
-                  bottom={'0px'}
-                  left='4px'
-                  padding={'2px'}
-                />
-              )}
-            </Box>
+                  {post?.replies[2] && (
+                    <Avatar
+                      size='xs'
+                      name='User'
+                      src={post?.replies[2].userProfilePic}
+                      position={'absolute'}
+                      bottom={'0px'}
+                      left='-5px'
+                      padding={'2px'}
+                    />
+                  )}
+                </Box>
+              </>
+            )}
           </Flex>
           <Flex flex={1} flexDirection={'column'} gap={2}>
             <Flex justifyContent={'space-between'} w={'full'}>
@@ -193,6 +193,8 @@ const UserPost = ({ post, postedBy, posts, setPosts }) => {
             </Flex>
           </Flex>
         </Flex>
+        <hr />
+        <br />
       </Link>
       <AlertDialog
         isOpen={isOpen}

@@ -17,9 +17,7 @@ const Header = () => {
   const setAuthScreen = useSetRecoilState(authScreenAtom);
   const authScreen = useRecoilValue(authScreenAtom);
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-
+  const handleLogout = () => {
     logout();
   };
 

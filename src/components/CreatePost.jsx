@@ -53,9 +53,7 @@ const CreatePost = () => {
       setRemainingChar(MAX_CHAR - inputText.length);
     }
   };
-  const handleCreatePost = async (e) => {
-    e.preventDefault();
-
+  const handleCreatePost = async () => {
     const data = await postData('/api/posts/create', {
       postedBy: user._id,
       text: postText,
@@ -69,7 +67,6 @@ const CreatePost = () => {
       onClose();
       setPostText('');
       setImgUrl('');
-
       handleToast('Success', 'Thrad created successfully!', 'success');
     } else if (error) {
       handleToast('Error', error, 'error');
@@ -93,7 +90,7 @@ const CreatePost = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
 
-        <ModalContent bg={'#c3bef0'}>
+        <ModalContent bg={'black'} color={'white'}>
           <ModalHeader>Create Thread</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>

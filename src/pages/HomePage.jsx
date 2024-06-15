@@ -1,5 +1,5 @@
 import { Box, Flex, Spinner, Text } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useHandleToast from '../hooks/useHandleToast';
 import { useRecoilState } from 'recoil';
 import postsAtom from '../atoms/postsAtom';
@@ -18,7 +18,7 @@ const HomePage = () => {
         setPosts(data?.feedPosts);
       } else if (error) {
         handleToast('Error', error, 'error');
-        setPosts(null);
+        setPosts([]);
         return;
       }
     };

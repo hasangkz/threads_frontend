@@ -36,8 +36,7 @@ const Signup = () => {
   });
   const { loading, error, postData } = usePostFetch();
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
+  const handleSignup = async () => {
     const data = await postData('/api/users/signup', input);
 
     if (data) {
