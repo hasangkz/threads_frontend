@@ -14,8 +14,6 @@ function App() {
   const user = useRecoilValue(userAtom);
   const { pathname } = useLocation();
 
-  console.log('user', user);
-
   return (
     <Box position={'relative'} w='full'>
       <Container

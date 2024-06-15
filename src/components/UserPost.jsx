@@ -103,7 +103,7 @@ const UserPost = ({ post, postedBy, posts, setPosts }) => {
                 navigate(`/${user.username}`);
               }}
             />
-            {post?.replies?.length > 0 && (
+            {currentUser && post?.replies?.length > 0 && (
               <>
                 <Box w='1px' h={'full'} bg='gray.light' my={2}></Box>
                 <Box position={'relative'} w={'full'}>
@@ -188,13 +188,13 @@ const UserPost = ({ post, postedBy, posts, setPosts }) => {
               </Box>
             )}
 
-            <Flex gap={3} my={1}>
-              <Actions post={post} />
-            </Flex>
+            {currentUser && (
+              <Flex gap={3} my={1}>
+                <Actions post={post} />
+              </Flex>
+            )}
           </Flex>
         </Flex>
-        <hr />
-        <br />
       </Link>
       <AlertDialog
         isOpen={isOpen}

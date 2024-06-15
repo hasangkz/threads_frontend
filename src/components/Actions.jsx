@@ -31,13 +31,13 @@ const Actions = ({ post }) => {
   const handleToast = useHandleToast();
 
   const handleLike = async () => {
-    const data = await putData(`/api/posts/like/${post._id}`);
+    const data = await putData(`/api/posts/like/${post?._id}`);
 
     if (data?.message) {
       if (!liked) {
         const updatedPosts = posts.map((p) => {
-          if (p._id === post._id) {
-            return { ...p, likes: [...p.likes, user._id] };
+          if (p?._id === post?._id) {
+            return { ...p, likes: [...p.likes, user?._id] };
           }
           return p;
         });
@@ -52,13 +52,13 @@ const Actions = ({ post }) => {
   };
 
   const handleUnlike = async () => {
-    const data = await putData(`/api/posts/unlike/${post._id}`);
+    const data = await putData(`/api/posts/unlike/${post?._id}`);
 
     if (data?.message) {
       if (liked) {
         const updatedPosts = posts.map((p) => {
-          if (p._id === post._id) {
-            return { ...p, likes: p.likes.filter((id) => id !== user._id) };
+          if (p?._id === post?._id) {
+            return { ...p, likes: p.likes.filter((id) => id !== user?._id) };
           }
           return p;
         });
@@ -70,11 +70,13 @@ const Actions = ({ post }) => {
   };
 
   const handleReply = async () => {
-    const data = await putData(`/api/posts/reply/${post._id}`, { text: reply });
+    const data = await putData(`/api/posts/reply/${post?._id}`, {
+      text: reply,
+    });
 
     if (data) {
       const updatedPosts = posts.map((p) => {
-        if (p._id === post._id) {
+        if (p?._id === post?._id) {
           return { ...p, replies: [...p.replies, data?.reply] };
         }
         return p;

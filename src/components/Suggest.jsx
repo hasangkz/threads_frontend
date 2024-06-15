@@ -54,7 +54,7 @@ const Suggest = () => {
           ))}
         <Flex direction={'column'} gap={4}>
           {suggestedUsers?.map((user) => (
-            <SuggestedUser key={user._id} user={user} />
+            <SuggestedUser key={user?._id} user={user} />
           ))}
         </Flex>
       </>

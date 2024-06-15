@@ -15,7 +15,6 @@ const useGetUserProfile = () => {
           method: 'GET',
         });
         const result = await res.json();
-        console.log('result', result);
         if (result.error) {
           handleToast('Error', result.error, 'error');
           return;

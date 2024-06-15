@@ -27,6 +27,8 @@ import {
   AlertDialogCloseButton,
 } from '@chakra-ui/react';
 import '../index.css';
+import UserFollowers from './UserFollowers';
+import UserFollowings from './UserFollowings';
 
 const UserHeader = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -143,7 +145,7 @@ const UserHeader = ({ user }) => {
           </Flex>
         )}
 
-        {currentUser?._id !== user._id && (
+        {currentUser && currentUser?._id !== user._id && (
           <Button
             size={'sm'}
             colorScheme={following ? 'pink' : 'teal'}
@@ -157,15 +159,15 @@ const UserHeader = ({ user }) => {
 
         <Flex w={'full'} justifyContent={'space-between'}>
           <Flex gap={2} alignItems={'center'}>
-            <Text color={'gray.ligth'}>
-              {user?.followers?.length} followers
-            </Text>
-            <Text color={'gray.black'} fontSize={'xl'}>
+            <UserFollowers user={user} />
+            <Text
+              justifyContent={'center'}
+              color={'gray.black'}
+              fontSize={'xl'}
+            >
               |
             </Text>
-            <Text color={'gray.ligth'}>
-              {user?.following?.length} following
-            </Text>
+            <UserFollowings user={user} />
           </Flex>
 
           <Flex>

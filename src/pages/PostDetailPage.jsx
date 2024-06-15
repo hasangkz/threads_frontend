@@ -13,11 +13,12 @@ import { useEffect } from 'react';
 import useHandleToast from '../hooks/useHandleToast';
 import { useParams } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import postsAtom from '../atoms/postsAtom';
 import useGetFetch from '../hooks/useGetFetch';
 import useGetUserProfile from '../hooks/useGetUserProfile';
 import Comment from '../components/Comment';
+import userAtom from '../atoms/userAtom';
 
 const PostDetailPage = () => {
   const { postID } = useParams();
@@ -26,6 +27,7 @@ const PostDetailPage = () => {
   const [posts, setPosts] = useRecoilState(postsAtom);
   const post = posts?.[0];
   const handleToast = useHandleToast();
+  const currentUser = useRecoilValue(userAtom);
 
   useEffect(() => {
     const getPost = async () => {
@@ -33,7 +35,6 @@ const PostDetailPage = () => {
       try {
         const data = await getData(`/api/posts/${postID}`);
         if (data) {
-          console.log('data', data);
           setPosts([data?.post]);
         } else if (error) {
           handleToast('Error', error, 'error');
@@ -91,18 +92,21 @@ const PostDetailPage = () => {
         </Box>
       )}
 
-      <Flex gap={3} my={3}>
-        <Actions post={post} />
-      </Flex>
-
-      <Divider my={4} />
-      {post?.replies?.map((reply) => (
-        <Comment
-          key={reply._id}
-          reply={reply}
-          lastReply={reply._id === post?.replies[post?.replies.length - 1]._id}
-        />
-      ))}
+      {currentUser && (
+        <Flex gap={3} my={3}>
+          <Actions post={post} />
+          <Divider my={4} />
+          {post?.replies?.map((reply) => (
+            <Comment
+              key={reply._id}
+              reply={reply}
+              lastReply={
+                reply._id === post?.replies[post?.replies.length - 1]._id
+              }
+            />
+          ))}
+        </Flex>
+      )}
     </>
   );
 };

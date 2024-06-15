@@ -21,10 +21,8 @@ const SuggestedUser = ({ user }) => {
     user?.followers?.includes(currentUser?._id)
   );
 
-  const handleFollow = async (e) => {
-    e.preventDefault();
-
-    const data = await follow(`/api/users/follow/${user._id}`);
+  const handleFollow = async () => {
+    const data = await follow(`/api/users/follow/${user?._id}`);
     if (data?.message) {
       setFollowing(!following);
       user?.followers?.push(currentUser?._id);
@@ -36,14 +34,11 @@ const SuggestedUser = ({ user }) => {
     }
   };
 
-  const handleUnFollow = async (e) => {
-    e.preventDefault();
-
+  const handleUnFollow = async () => {
     const data = await unFollow(`/api/users/unfollow/${user._id}`);
     if (data?.message) {
       setFollowing(!following);
       user?.followers?.pop();
-
       handleToast('Success', data?.message, 'success');
     } else if (unfollowError) {
       handleToast('Error', error, 'error');

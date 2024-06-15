@@ -1,10 +1,11 @@
 import { useState } from 'react';
 
 const useGetFetch = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const getData = async (url) => {
+    setLoading(true);
     try {
       const response = await fetch(url, {
         method: 'GET',

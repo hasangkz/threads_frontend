@@ -27,13 +27,10 @@ const UserPage = () => {
         return;
       }
     };
-
-    if (user) {
-      getPosts();
-    }
+    if (user && username) getPosts();
   }, [username, error, handleToast, setPosts, user]);
 
-  if ((!user && userLoading) || loading) {
+  if (userLoading || loading) {
     return (
       <Flex justifyContent={'center'}>
         <Spinner size={'xl'} />
@@ -41,7 +38,7 @@ const UserPage = () => {
     );
   }
 
-  if (!user && !userLoading) {
+  if (!user) {
     return (
       <Flex justifyContent={'center'}>
         <Text as='mark' fontSize={'xx-large'}>
