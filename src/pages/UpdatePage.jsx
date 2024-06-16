@@ -31,6 +31,8 @@ const UpdatePage = () => {
     password: '',
   });
 
+  console.log('user', user);
+
   const fileRef = useRef(null);
   const { handleImageChange, imgUrl } = useHandleImage();
 
@@ -38,7 +40,8 @@ const UpdatePage = () => {
 
   const { loading, error, putData } = usePutFetch();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const data = await putData(`/api/users/update/${user._id}`, {
       ...input,
       profilePic: imgUrl,
