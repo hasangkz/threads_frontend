@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  Button,
   Divider,
   Flex,
   Image,
@@ -93,19 +92,23 @@ const PostDetailPage = () => {
       )}
 
       {currentUser && (
-        <Flex gap={3} my={3}>
-          <Actions post={post} />
-          <Divider my={4} />
-          {post?.replies?.map((reply) => (
-            <Comment
-              key={reply._id}
-              reply={reply}
-              lastReply={
-                reply._id === post?.replies[post?.replies.length - 1]._id
-              }
-            />
-          ))}
-        </Flex>
+        <>
+          <Flex gap={3} my={3}>
+            <Actions post={post} />
+            <Divider my={4} />
+          </Flex>
+          <Box p={2}>
+            {post?.replies?.map((reply) => (
+              <Comment
+                key={reply._id}
+                reply={reply}
+                lastReply={
+                  reply._id === post?.replies[post?.replies.length - 1]._id
+                }
+              />
+            ))}
+          </Box>
+        </>
       )}
     </>
   );

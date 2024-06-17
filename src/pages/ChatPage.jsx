@@ -33,8 +33,6 @@ const ChatPage = () => {
   const currentUser = useRecoilValue(userAtom);
   const handleToast = useHandleToast();
 
-  console.log('conversations', conversations);
-
   useEffect(() => {
     const getConversations = async () => {
       try {
@@ -44,7 +42,6 @@ const ChatPage = () => {
           handleToast('Error', data.error, 'error');
           return;
         }
-        console.log(data);
         setConversations(data?.messages);
       } catch (error) {
         handleToast('Error', error.message, 'error');
@@ -62,7 +59,6 @@ const ChatPage = () => {
     try {
       const res = await fetch(`/api/users/profile/${searchText}`);
       const searchedUser = await res.json();
-      console.log('searchedUser', searchedUser);
       if (searchedUser.error) {
         handleToast('Error', searchedUser.error, 'error');
         return;

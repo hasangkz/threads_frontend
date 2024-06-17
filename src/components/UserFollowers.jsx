@@ -12,12 +12,9 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import UserFollower from './UserFollower';
-import userAtom from '../atoms/userAtom';
-import { useRecoilValue } from 'recoil';
 
-const UserFollowers = ({ user }) => {
+const UserFollowers = ({ user, currentUser }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const currentUser = useRecoilValue(userAtom);
 
   const handleOpenModal = () => {
     if (user?.followers?.length !== 0 && currentUser) {
@@ -39,7 +36,11 @@ const UserFollowers = ({ user }) => {
           <ModalBody>
             <Flex direction={'column'} gap={4}>
               {user?.followers?.map((followerItem) => (
-                <UserFollower key={user._id} userID={followerItem} />
+                <UserFollower
+                  currentUser={currentUser}
+                  key={user._id}
+                  userID={followerItem}
+                />
               ))}
             </Flex>
           </ModalBody>

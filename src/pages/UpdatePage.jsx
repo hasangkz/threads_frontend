@@ -22,6 +22,7 @@ import usePutFetch from '../hooks/usePutFetch';
 
 const UpdatePage = () => {
   const [user, setUser] = useRecoilState(userAtom);
+
   const [input, setInput] = useState({
     name: user.name,
     username: user.username,
@@ -30,8 +31,6 @@ const UpdatePage = () => {
     bio: user.bio,
     password: '',
   });
-
-  console.log('user', user);
 
   const fileRef = useRef(null);
   const { handleImageChange, imgUrl } = useHandleImage();

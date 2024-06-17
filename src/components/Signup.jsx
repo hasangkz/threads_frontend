@@ -29,12 +29,15 @@ const Signup = () => {
   const setUser = useSetRecoilState(userAtom);
   const handleToast = useHandleToast();
   const [input, setInput] = useState({
-    name: '',
-    username: '',
-    email: '',
-    password: '',
+    name: null,
+    username: null,
+    email: null,
+    password: null,
   });
   const { loading, error, postData } = usePostFetch();
+
+  let disabled =
+    !input?.email || !input?.name || !input?.username || !input?.password;
 
   const handleSignup = async () => {
     const data = await postData('/api/users/signup', input);
@@ -73,6 +76,8 @@ const Signup = () => {
                 <FormControl isRequired>
                   <FormLabel>Full name</FormLabel>
                   <Input
+                    required={true}
+                    isRequired={true}
                     type='text'
                     onChange={(e) =>
                       setInput({ ...input, name: e.target.value })
@@ -85,6 +90,8 @@ const Signup = () => {
                 <FormControl isRequired>
                   <FormLabel>Username</FormLabel>
                   <Input
+                    required={true}
+                    isRequired={true}
                     type='text'
                     onChange={(e) =>
                       setInput({ ...input, username: e.target.value })
@@ -101,12 +108,16 @@ const Signup = () => {
                 placeholder='your-email@example.com'
                 onChange={(e) => setInput({ ...input, email: e.target.value })}
                 value={input.email}
+                required={true}
+                isRequired={true}
               />
             </FormControl>
             <FormControl isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
                 <Input
+                  required={true}
+                  isRequired={true}
                   type={showPassword ? 'text' : 'password'}
                   onChange={(e) =>
                     setInput({ ...input, password: e.target.value })
@@ -136,13 +147,22 @@ const Signup = () => {
                 <Stack spacing={10} pt={2}>
                   <Button
                     loadingText='Submitting'
+                    isDisabled={disabled}
                     size='lg'
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
-                    bg={useColorModeValue('gray.600', 'gray.700')}
+                    bg={
+                      disabled
+                        ? // eslint-disable-next-line react-hooks/rules-of-hooks
+                          useColorModeValue('gray.600', 'gray.700')
+                        : // eslint-disable-next-line react-hooks/rules-of-hooks
+                          useColorModeValue('green.700', 'green.800')
+                    }
                     color={'white'}
                     _hover={{
-                      // eslint-disable-next-line react-hooks/rules-of-hooks
-                      bg: useColorModeValue('green.700', 'green.800'),
+                      bg: disabled
+                        ? // eslint-disable-next-line react-hooks/rules-of-hooks
+                          useColorModeValue('gray.500', 'black.600')
+                        : // eslint-disable-next-line react-hooks/rules-of-hooks
+                          useColorModeValue('green.500', 'green.600'),
                     }}
                     onClick={handleSignup}
                   >

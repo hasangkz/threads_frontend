@@ -4,13 +4,13 @@ import useHandleToast from '../hooks/useHandleToast';
 import { Avatar, Box, Button, Flex, Spinner, Text } from '@chakra-ui/react';
 import useUnFollow from '../hooks/useUnFollow';
 import useFollow from '../hooks/useFollow';
-import { useRecoilValue } from 'recoil';
-import userAtom from '../atoms/userAtom';
 import { Link } from 'react-router-dom';
 
-const UserFollower = ({ userID }) => {
+const UserFollower = ({ userID, currentUser }) => {
   const [user, setUser] = useState(null);
-  const currentUser = useRecoilValue(userAtom);
+  const [following, setFollowing] = useState(
+    user?.followers?.includes(currentUser?._id)
+  );
   const handleToast = useHandleToast();
   const { loading: getLoading, error: getError, getData } = useGetFetch();
   const { loading: followLoading, error: followError, follow } = useFollow();
@@ -20,9 +20,9 @@ const UserFollower = ({ userID }) => {
     unFollow,
   } = useUnFollow();
 
-  const [following, setFollowing] = useState(
-    user?.followers?.includes(currentUser?._id)
-  );
+  useEffect(() => {
+    setFollowing(user?.followers?.includes(currentUser?._id));
+  }, [following, setFollowing, user, currentUser]);
 
   useEffect(() => {
     const getUser = async () => {

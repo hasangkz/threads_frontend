@@ -11,23 +11,20 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import userAtom from '../atoms/userAtom';
-import { useRecoilValue } from 'recoil';
 import UserFollowing from './UserFollowing';
 
-const UserFollowings = ({ user }) => {
+const UserFollowings = ({ user, currentUser }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const currentUser = useRecoilValue(userAtom);
   const handleOpenModal = () => {
-    console.log('sa');
     if (user?.following?.length !== 0 && currentUser) {
       onOpen();
     }
   };
+
   return (
     <>
       <Button onClick={handleOpenModal}>
-        <Text color={'gray.ligth'}>{user?.following?.length} following</Text>
+        <Text color={'gray.ligth'}>{user?.following?.length} followings</Text>
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -38,7 +35,11 @@ const UserFollowings = ({ user }) => {
           <ModalBody>
             <Flex direction={'column'} gap={4}>
               {user?.following?.map((followingItem) => (
-                <UserFollowing key={user._id} userID={followingItem} />
+                <UserFollowing
+                  currentUser={currentUser}
+                  key={user._id}
+                  userID={followingItem}
+                />
               ))}
             </Flex>
           </ModalBody>

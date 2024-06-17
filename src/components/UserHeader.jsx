@@ -78,7 +78,6 @@ const UserHeader = ({ user }) => {
 
   const handleFreezeAccount = () => {
     onClose();
-    console.log('tıkladı');
   };
 
   const handleCopyUser = () => {
@@ -159,7 +158,7 @@ const UserHeader = ({ user }) => {
 
         <Flex w={'full'} justifyContent={'space-between'}>
           <Flex gap={2} alignItems={'center'}>
-            <UserFollowers user={user} />
+            <UserFollowers currentUser={currentUser} user={user} />
             <Text
               justifyContent={'center'}
               color={'gray.black'}
@@ -167,7 +166,7 @@ const UserHeader = ({ user }) => {
             >
               |
             </Text>
-            <UserFollowings user={user} />
+            <UserFollowings currentUser={currentUser} user={user} />
           </Flex>
 
           <Flex>
