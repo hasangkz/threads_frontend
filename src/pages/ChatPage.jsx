@@ -6,6 +6,7 @@ import {
   Input,
   Skeleton,
   SkeletonCircle,
+  Spinner,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -19,12 +20,10 @@ import {
   selectedConversationAtom,
 } from '../atoms/messagesAtom';
 import userAtom from '../atoms/userAtom';
-import { useSocket } from '../context/SocketContext';
 import useHandleToast from '../hooks/useHandleToast';
+import useGetFetch from '../hooks/useGetFetch';
 
 const ChatPage = () => {
-  const [searchingUser, setSearchingUser] = useState(false);
-  const [loadingConversations, setLoadingConversations] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [selectedConversation, setSelectedConversation] = useRecoilState(
     selectedConversationAtom
@@ -33,80 +32,82 @@ const ChatPage = () => {
   const currentUser = useRecoilValue(userAtom);
   const handleToast = useHandleToast();
 
+  const { loading, error, getData } = useGetFetch();
+
   useEffect(() => {
     const getConversations = async () => {
-      try {
-        const res = await fetch('/api/messages/conversations');
-        const data = await res.json();
-        if (data.error) {
-          handleToast('Error', data.error, 'error');
-          return;
-        }
-        setConversations(data?.messages);
-      } catch (error) {
-        handleToast('Error', error.message, 'error');
-      } finally {
-        setLoadingConversations(false);
+      const data = await getData('/api/messages/conversations');
+      if (data) {
+        setConversations(data?.conversations);
+      } else if (error) {
+        handleToast('Error', error, 'error');
+        return;
       }
     };
-
     getConversations();
   }, [handleToast, setConversations]);
 
   const handleConversationSearch = async (e) => {
     e.preventDefault();
-    setSearchingUser(true);
     try {
-      const res = await fetch(`/api/users/profile/${searchText}`);
-      const searchedUser = await res.json();
-      if (searchedUser.error) {
-        handleToast('Error', searchedUser.error, 'error');
-        return;
-      }
+      const data = await getData(`/api/users/profile/${searchText}`);
+      if (data && data?.user) {
+        const searchedUser = data?.user;
 
-      const messagingYourself = searchedUser?.user?._id === currentUser?._id;
-      if (messagingYourself) {
-        handleToast('Error', 'You cannot message yourself', 'error');
-        return;
-      }
+        const messagingYourself = searchedUser?.user?._id === currentUser?._id;
 
-      const conversationAlreadyExists = conversations?.find(
-        (conversation) =>
-          conversation.participants[0]._id === searchedUser?.user?._id
-      );
+        if (messagingYourself) {
+          handleToast('Error', 'You cannot message yourself', 'error');
+          return;
+        }
 
-      if (conversationAlreadyExists) {
-        setSelectedConversation({
-          _id: conversationAlreadyExists._id,
-          userId: searchedUser?.user?._id,
-          username: searchedUser?.user?.username,
-          userProfilePic: searchedUser?.user?.profilePic,
-        });
-        return;
-      }
+        const conversationAlreadyExists = conversations?.find(
+          (conversation) =>
+            conversation?.participants?.[0]?._id === searchedUser?.user?._id
+        );
 
-      const mockConversation = {
-        mock: true,
-        lastMessage: {
-          text: '',
-          sender: '',
-        },
-        _id: Date.now(),
-        participants: [
-          {
-            _id: searchedUser?.user?._id,
+        if (conversationAlreadyExists) {
+          setSelectedConversation({
+            _id: conversationAlreadyExists._id,
+            userId: searchedUser?.user?._id,
             username: searchedUser?.user?.username,
-            profilePic: searchedUser?.user?.profilePic,
+            userProfilePic: searchedUser?.user?.profilePic,
+          });
+          return;
+        }
+
+        const mockConversation = {
+          mock: true,
+          lastMessage: {
+            text: '',
+            sender: '',
           },
-        ],
-      };
-      setConversations((prevConvs) => [...prevConvs, mockConversation]);
+          _id: Date.now(),
+          participants: [
+            {
+              _id: searchedUser?.user?._id,
+              username: searchedUser?.user?.username,
+              profilePic: searchedUser?.user?.profilePic,
+            },
+          ],
+        };
+        setConversations((prevConvs) => [...prevConvs, mockConversation]);
+      } else if (error) {
+        handleToast('Error', error, 'error');
+        return;
+      }
     } catch (error) {
       handleToast('Error', error.message, 'error');
-    } finally {
-      setSearchingUser(false);
     }
   };
+
+  if (loading) {
+    return (
+      <Flex justifyContent={'center'}>
+        <Spinner size={'xl'} />
+      </Flex>
+    );
+  }
 
   return (
     <Box
@@ -134,6 +135,7 @@ const ChatPage = () => {
         >
           <Text
             fontWeight={700}
+            // eslint-disable-next-line react-hooks/rules-of-hooks
             color={useColorModeValue('gray.600', 'gray.400')}
           >
             Your Chats
@@ -147,14 +149,14 @@ const ChatPage = () => {
               <Button
                 size={'sm'}
                 onClick={handleConversationSearch}
-                isLoading={searchingUser}
+                isLoading={loading}
               >
                 <SearchIcon />
               </Button>
             </Flex>
           </form>
 
-          {loadingConversations &&
+          {loading &&
             [0, 1, 2, 3, 4]?.map((_, i) => (
               <Flex
                 key={i}
@@ -173,7 +175,7 @@ const ChatPage = () => {
               </Flex>
             ))}
 
-          {!loadingConversations &&
+          {!loading &&
             conversations?.map((conversation) => (
               <Conversation
                 key={conversation._id}
@@ -184,6 +186,9 @@ const ChatPage = () => {
                 conversation={conversation}
               />
             ))}
+
+          <Conversation />
+          <Conversation />
         </Flex>
         {!selectedConversation._id && (
           <Flex

@@ -8,6 +8,7 @@ const Suggest = () => {
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   const { loading, error, getData } = useGetFetch();
   const handleToast = useHandleToast();
+
   useEffect(() => {
     const getSuggestedUsers = async () => {
       const data = await getData('/api/users/suggest');
