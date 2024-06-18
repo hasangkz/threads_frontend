@@ -29,6 +29,8 @@ import {
 import '../index.css';
 import UserFollowers from './UserFollowers';
 import UserFollowings from './UserFollowings';
+import usePostFetch from '../hooks/usePostFetch';
+import useLogout from '../hooks/useLogout';
 
 const UserHeader = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,11 +38,13 @@ const UserHeader = ({ user }) => {
   const handleToast = useHandleToast();
   const currentUser = useRecoilValue(userAtom);
   const { loading, error, follow } = useFollow();
+  const { loading: postLoading, error: postError, postData } = usePostFetch();
   const {
     loading: unfollowLoading,
     error: unfollowError,
     unFollow,
   } = useUnFollow();
+  const logout = useLogout();
 
   const [following, setFollowing] = useState(
     user?.followers?.includes(currentUser?._id)
@@ -76,8 +80,16 @@ const UserHeader = ({ user }) => {
     }
   };
 
-  const handleFreezeAccount = () => {
-    onClose();
+  const handleFreezeAccount = async () => {
+    const data = await postData(`/api/users/freeze/${currentUser?._id}`);
+    if (data && data?.success) {
+      onClose();
+      await logout();
+      handleToast('Success', 'Account has been frozen!', 'success');
+    } else if (error) {
+      handleToast('Error', error, 'error');
+      return;
+    }
   };
 
   const handleCopyUser = () => {
@@ -219,10 +231,15 @@ const UserHeader = ({ user }) => {
             All you have to do is log in to activate your account.
           </AlertDialogBody>
           <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onClose}>
+            <Button isLoading={postLoading} ref={cancelRef} onClick={onClose}>
               No
             </Button>
-            <Button colorScheme='red' ml={3} onClick={handleFreezeAccount}>
+            <Button
+              isLoading={postLoading}
+              colorScheme='red'
+              ml={3}
+              onClick={handleFreezeAccount}
+            >
               Yes
             </Button>
           </AlertDialogFooter>

@@ -3,7 +3,6 @@ import {
   AvatarBadge,
   Box,
   Flex,
-  Image,
   Stack,
   Text,
   WrapItem,
@@ -11,9 +10,9 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import userAtom from '../atoms/userAtom';
-import { BsCheck2All, BsFillImageFill } from 'react-icons/bs';
+import { BsCheck2All } from 'react-icons/bs';
 import { selectedConversationAtom } from '../atoms/messagesAtom';
+import userAtom from '../atoms/userAtom';
 
 const Conversation = ({ conversation, isOnline }) => {
   const user = conversation?.participants[0];
@@ -23,7 +22,7 @@ const Conversation = ({ conversation, isOnline }) => {
     selectedConversationAtom
   );
   const colorMode = useColorMode();
-
+  console.log('user', user);
   return (
     <Flex
       gap={4}
@@ -31,7 +30,7 @@ const Conversation = ({ conversation, isOnline }) => {
       p={'1'}
       _hover={{
         cursor: 'pointer',
-        bg: useColorModeValue('gray.600', 'gray.dark'),
+        bg: useColorModeValue('gray.300', 'gray.500'),
         color: 'white',
       }}
       onClick={() =>
@@ -46,8 +45,8 @@ const Conversation = ({ conversation, isOnline }) => {
       bg={
         selectedConversation?._id === conversation?._id
           ? colorMode === 'light'
-            ? 'gray.400'
-            : 'gray.dark'
+            ? 'gray.300'
+            : 'gray.500'
           : ''
       }
       borderRadius={'md'}
@@ -77,9 +76,11 @@ const Conversation = ({ conversation, isOnline }) => {
           ) : (
             ''
           )}
-          {lastMessage?.text?.length > 18
-            ? lastMessage?.text.substring(0, 18) + '...'
-            : lastMessage?.text || <BsFillImageFill size={16} />}
+          {lastMessage?.text?.length > 20
+            ? lastMessage?.text.substring(0, 20) + '...'
+            : lastMessage?.text || (
+                <Text fontStyle={'italic'}>{user?.name}</Text>
+              )}
         </Text>
       </Stack>
     </Flex>

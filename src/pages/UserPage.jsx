@@ -20,7 +20,7 @@ const UserPage = () => {
   useEffect(() => {
     const getPosts = async () => {
       const data = await getData(`/api/posts/user/${username}`);
-      if (data) {
+      if (data && data?.posts) {
         setPosts(data?.posts);
       } else if (error) {
         handleToast('Error', error, 'error');

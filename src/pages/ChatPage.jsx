@@ -6,7 +6,6 @@ import {
   Input,
   Skeleton,
   SkeletonCircle,
-  Spinner,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -24,6 +23,7 @@ import useHandleToast from '../hooks/useHandleToast';
 import useGetFetch from '../hooks/useGetFetch';
 
 const ChatPage = () => {
+  const { loading, error, getData } = useGetFetch();
   const [searchText, setSearchText] = useState('');
   const [selectedConversation, setSelectedConversation] = useRecoilState(
     selectedConversationAtom
@@ -32,7 +32,7 @@ const ChatPage = () => {
   const currentUser = useRecoilValue(userAtom);
   const handleToast = useHandleToast();
 
-  const { loading, error, getData } = useGetFetch();
+  console.log('conversations', conversations);
 
   useEffect(() => {
     const getConversations = async () => {
@@ -50,9 +50,10 @@ const ChatPage = () => {
   const handleConversationSearch = async (e) => {
     e.preventDefault();
     try {
-      const data = await getData(`/api/users/profile/${searchText}`);
-      if (data && data?.user) {
-        const searchedUser = data?.user;
+      const searchedUser = await getData(`/api/users/profile/${searchText}`);
+      setSearchText('');
+      if (searchedUser && searchedUser?.user) {
+        console.log('searchedUser', searchedUser);
 
         const messagingYourself = searchedUser?.user?._id === currentUser?._id;
 
@@ -63,10 +64,12 @@ const ChatPage = () => {
 
         const conversationAlreadyExists = conversations?.find(
           (conversation) =>
+            conversation?.participants?.length > 0 &&
             conversation?.participants?.[0]?._id === searchedUser?.user?._id
         );
 
         if (conversationAlreadyExists) {
+          console.log('zaten var');
           setSelectedConversation({
             _id: conversationAlreadyExists._id,
             userId: searchedUser?.user?._id,
@@ -75,6 +78,8 @@ const ChatPage = () => {
           });
           return;
         }
+
+        console.log('yeni oluşturuluyor');
 
         const mockConversation = {
           mock: true,
@@ -100,14 +105,6 @@ const ChatPage = () => {
       handleToast('Error', error.message, 'error');
     }
   };
-
-  if (loading) {
-    return (
-      <Flex justifyContent={'center'}>
-        <Spinner size={'xl'} />
-      </Flex>
-    );
-  }
 
   return (
     <Box
@@ -156,7 +153,7 @@ const ChatPage = () => {
             </Flex>
           </form>
 
-          {loading &&
+          {loading ? (
             [0, 1, 2, 3, 4]?.map((_, i) => (
               <Flex
                 key={i}
@@ -173,39 +170,43 @@ const ChatPage = () => {
                   <Skeleton h={'8px'} w={'90%'} />
                 </Flex>
               </Flex>
-            ))}
-
-          {!loading &&
-            conversations?.map((conversation) => (
-              <Conversation
-                key={conversation._id}
-                // isOnline={onlineUsers.includes(
-                //   conversation.participants[0]._id
-                // )}
-                isOnline={false}
-                conversation={conversation}
-              />
-            ))}
-
-          <Conversation />
-          <Conversation />
+            ))
+          ) : (
+            <>
+              {conversations?.map((conversation) => (
+                <Conversation
+                  key={conversation._id}
+                  // isOnline={onlineUsers.includes(
+                  //   conversation.participants[0]._id
+                  // )}
+                  isOnline={false}
+                  conversation={conversation}
+                />
+              ))}
+            </>
+          )}
         </Flex>
-        {!selectedConversation._id && (
-          <Flex
-            flex={70}
-            borderRadius={'md'}
-            p={2}
-            flexDir={'column'}
-            alignItems={'center'}
-            justifyContent={'center'}
-            height={'400px'}
-          >
-            <LuMessagesSquare size={100} />
-            <Text fontSize={20}>Let's talk!</Text>
-          </Flex>
-        )}
 
-        {selectedConversation?._id && <MessageContainer />}
+        {selectedConversation?._id ? (
+          <MessageContainer />
+        ) : (
+          <>
+            <Flex
+              flex={70}
+              borderRadius={'md'}
+              p={2}
+              flexDir={'column'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              height={'400px'}
+            >
+              <LuMessagesSquare size={100} />
+              <Text fontSize={20}>
+                Send and receive messages without your phone!
+              </Text>
+            </Flex>
+          </>
+        )}
       </Flex>
     </Box>
   );

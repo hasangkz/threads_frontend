@@ -1,8 +1,10 @@
 import {
+  AbsoluteCenter,
   Avatar,
+  Box,
+  Center,
   Divider,
   Flex,
-  Image,
   Skeleton,
   SkeletonCircle,
   Text,
@@ -11,71 +13,56 @@ import {
 import Message from './Message';
 import MessageInput from './MessageInput';
 import { useEffect, useRef, useState } from 'react';
-import {
-  conversationsAtom,
-  selectedConversationAtom,
-} from '../atoms/messagesAtom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { selectedConversationAtom } from '../atoms/messagesAtom';
+import { useRecoilValue } from 'recoil';
 import userAtom from '../atoms/userAtom';
-import { useSocket } from '../context/SocketContext.jsx';
-import messageSound from '../assets/sounds/message.mp3';
 import useHandleToast from '../hooks/useHandleToast.js';
+import useGetFetch from '../hooks/useGetFetch';
 
 const MessageContainer = () => {
+  const { loading, error, getData } = useGetFetch();
+  const [messages, setMessages] = useState([]);
   const handleToast = useHandleToast();
   const selectedConversation = useRecoilValue(selectedConversationAtom);
-  const [loadingMessages, setLoadingMessages] = useState(true);
-  const [messages, setMessages] = useState([]);
   const currentUser = useRecoilValue(userAtom);
-  const setConversations = useSetRecoilState(conversationsAtom);
-  const messageEndRef = useRef(null);
-  // const { socket } = useSocket();
-
-  useEffect(() => {
-    messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
   useEffect(() => {
     const getMessages = async () => {
-      setLoadingMessages(true);
       setMessages([]);
-      try {
-        if (selectedConversation.mock) return;
-        const res = await fetch(`/api/messages/${selectedConversation.userId}`);
-        const data = await res.json();
-        if (data.error) {
-          handleToast('Error', data.error, 'error');
-          return;
-        }
+      if (selectedConversation?.mock) return;
+      const data = await getData(
+        `/api/messages/${selectedConversation?.userId}`
+      );
+      console.log('data', data);
+      if (data && data?.messages) {
         setMessages(data?.messages);
-      } catch (error) {
-        handleToast('Error', error.message, 'error');
-      } finally {
-        setLoadingMessages(false);
+      } else if (error) {
+        handleToast('Error', error, 'error');
+        return;
       }
     };
 
     getMessages();
-  }, [handleToast, selectedConversation.userId, selectedConversation.mock]);
+  }, [handleToast, setMessages, selectedConversation?.userId]);
 
   return (
     <Flex
       flex='70'
-      bg={useColorModeValue('gray.200', 'gray.dark')}
+      bg={useColorModeValue('gray.200', 'gray.500')}
       borderRadius={'md'}
       p={2}
       flexDirection={'column'}
     >
       {/* Message header */}
       <Flex w={'full'} h={12} alignItems={'center'} gap={2}>
-        <Avatar src={selectedConversation.userProfilePic} size={'sm'} />
+        <Avatar src={selectedConversation?.userProfilePic} size={'sm'} />
         <Text display={'flex'} alignItems={'center'}>
-          {selectedConversation.username}{' '}
-          <Image src='/verified.png' w={4} h={4} ml={1} />
+          {selectedConversation?.username}
         </Text>
       </Flex>
 
-      <Divider />
+      <Box position='relative' padding='2'>
+        <Divider backgroundColor={'green !important'} />
+      </Box>
 
       <Flex
         flexDir={'column'}
@@ -85,7 +72,7 @@ const MessageContainer = () => {
         height={'400px'}
         overflowY={'auto'}
       >
-        {loadingMessages &&
+        {loading ? (
           [...Array(5)].map((_, i) => (
             <Flex
               key={i}
@@ -103,25 +90,19 @@ const MessageContainer = () => {
               </Flex>
               {i % 2 !== 0 && <SkeletonCircle size={7} />}
             </Flex>
-          ))}
-
-        {!loadingMessages &&
-          messages.map((message) => (
-            <Flex
-              key={message._id}
-              direction={'column'}
-              ref={
-                messages.length - 1 === messages.indexOf(message)
-                  ? messageEndRef
-                  : null
-              }
-            >
-              <Message
-                message={message}
-                ownMessage={currentUser._id === message.sender}
-              />
-            </Flex>
-          ))}
+          ))
+        ) : (
+          <>
+            {messages?.map((message) => (
+              <Flex key={message?._id} direction={'column'}>
+                <Message
+                  message={message}
+                  ownMessage={currentUser?._id === message?.sender}
+                />
+              </Flex>
+            ))}
+          </>
+        )}
       </Flex>
 
       <MessageInput setMessages={setMessages} />

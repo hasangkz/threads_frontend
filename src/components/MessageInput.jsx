@@ -23,6 +23,7 @@ import {
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { BsFillImageFill } from 'react-icons/bs';
 import useHandleImage from '../hooks/useHandleImage';
+import usePostFetch from '../hooks/usePostFetch';
 
 const MessageInput = ({ setMessages }) => {
   const [messageText, setMessageText] = useState('');
@@ -32,34 +33,20 @@ const MessageInput = ({ setMessages }) => {
   const imageRef = useRef(null);
   const { onClose } = useDisclosure();
   const { handleImageChange, imgUrl, setImgUrl } = useHandleImage();
-  const [isSending, setIsSending] = useState(false);
+  const { loading, error, postData } = usePostFetch();
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!messageText && !imgUrl) return;
-    if (isSending) return;
 
-    setIsSending(true);
+    const data = await postData('/api/messages', {
+      message: messageText,
+      recipientId: selectedConversation.userId,
+      img: imgUrl,
+    });
 
-    try {
-      const res = await fetch('/api/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: messageText,
-          recipientId: selectedConversation.userId,
-          img: imgUrl,
-        }),
-      });
-      const data = await res.json();
-      if (data.error) {
-        handleToast('Error', data.error, 'error');
-        return;
-      }
-      setMessages((messages) => [...messages, data]);
-
+    if (data && data?.newMessage) {
+      setMessages((messages) => [...messages, data?.newMessage]);
       setConversations((prevConvs) => {
         const updatedConversations = prevConvs.map((conversation) => {
           if (conversation._id === selectedConversation._id) {
@@ -77,12 +64,12 @@ const MessageInput = ({ setMessages }) => {
       });
       setMessageText('');
       setImgUrl('');
-    } catch (error) {
-      handleToast('Error', error.message, 'error');
-    } finally {
-      setIsSending(false);
+    } else if (error) {
+      handleToast('Error', error, 'error');
+      return;
     }
   };
+
   return (
     <Flex gap={2} alignItems={'center'}>
       <form onSubmit={handleSendMessage} style={{ flex: 95 }}>
@@ -123,14 +110,14 @@ const MessageInput = ({ setMessages }) => {
               <Image src={imgUrl} />
             </Flex>
             <Flex justifyContent={'flex-end'} my={2}>
-              {!isSending ? (
+              {loading ? (
+                <Spinner size={'md'} />
+              ) : (
                 <IoSendSharp
                   size={24}
                   cursor={'pointer'}
                   onClick={handleSendMessage}
                 />
-              ) : (
-                <Spinner size={'md'} />
               )}
             </Flex>
           </ModalBody>

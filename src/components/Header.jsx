@@ -3,7 +3,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import authScreenAtom from '../atoms/authAtom';
 import useLogout from '../hooks/useLogout';
 import userAtom from '../atoms/userAtom';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import { FiLogOut } from 'react-icons/fi';
 import { LuMessageSquare } from 'react-icons/lu';
@@ -16,6 +16,7 @@ const Header = () => {
   const logout = useLogout();
   const setAuthScreen = useSetRecoilState(authScreenAtom);
   const authScreen = useRecoilValue(authScreenAtom);
+  const { pathname } = useLocation();
 
   const handleLogout = () => {
     logout();
@@ -33,7 +34,11 @@ const Header = () => {
     <Flex justifyContent={'space-between'} mt={6} mb='12'>
       {user && (
         <Flex alignItems={'center'} gap={4}>
-          <Link as={RouterLink} to='/'>
+          <Link
+            as={RouterLink}
+            to='/'
+            style={{ opacity: pathname === '/' ? '0.3' : '1' }}
+          >
             <TiHome size={30} />
           </Link>
           <Link as={RouterLink} to={`/${user.username}`}>
@@ -59,7 +64,11 @@ const Header = () => {
 
       {user && (
         <Flex alignItems={'center'} gap={4}>
-          <Link as={RouterLink} to={`/chat`}>
+          <Link
+            as={RouterLink}
+            to={`/chat`}
+            style={{ opacity: pathname === '/chat' ? '0.3' : '1' }}
+          >
             <LuMessageSquare size={30} />
           </Link>
           <Button size={'xs'} onClick={handleLogout}>

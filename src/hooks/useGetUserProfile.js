@@ -19,7 +19,7 @@ const useGetUserProfile = () => {
           handleToast('Error', result.error, 'error');
           return;
         }
-        if (result.isFrozen) {
+        if (result?.user?.isFrozen) {
           setUser(null);
           return;
         }
