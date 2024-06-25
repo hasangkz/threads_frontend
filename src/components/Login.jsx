@@ -31,6 +31,8 @@ export default function LoginCard() {
     password: '',
   });
 
+  let disabled = !input?.username || !input?.password;
+
   const { loading, error, postData } = usePostFetch();
 
   const handleToast = useHandleToast();
@@ -127,6 +129,7 @@ export default function LoginCard() {
                     }}
                     onClick={handleLogin}
                     isLoading={loading}
+                    isDisabled={disabled}
                   >
                     Login
                   </Button>

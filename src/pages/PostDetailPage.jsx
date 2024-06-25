@@ -100,10 +100,10 @@ const PostDetailPage = () => {
           <Box p={2}>
             {post?.replies?.map((reply) => (
               <Comment
-                key={reply._id}
+                key={reply?._id}
                 reply={reply}
                 lastReply={
-                  reply._id === post?.replies[post?.replies.length - 1]._id
+                  reply?._id === post?.replies[post?.replies?.length - 1]?._id
                 }
               />
             ))}

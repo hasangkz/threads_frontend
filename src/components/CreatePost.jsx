@@ -55,7 +55,7 @@ const CreatePost = () => {
   };
   const handleCreatePost = async () => {
     const data = await postData('/api/posts/create', {
-      postedBy: user._id,
+      postedBy: user?._id,
       text: postText,
       img: imgUrl,
     });

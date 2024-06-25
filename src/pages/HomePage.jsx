@@ -46,7 +46,7 @@ const HomePage = () => {
     <Flex gap='10' alignItems={'flex-start'}>
       <Box flex={70}>
         {posts?.map((post) => (
-          <UserPost key={post._id} post={post} postedBy={post.postedBy} />
+          <UserPost key={post?._id} post={post} postedBy={post?.postedBy} />
         ))}
       </Box>
       <Box

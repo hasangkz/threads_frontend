@@ -57,7 +57,7 @@ const UserPost = ({ post, postedBy, posts, setPosts }) => {
 
       if (data) {
         handleToast('Success', 'Post deleted succesfully!', 'success');
-        setPosts(posts.filter((p) => p._id !== post?._id));
+        setPosts(posts.filter((p) => p?._id !== post?._id));
       } else if (deleteError) {
         handleToast('Error', deleteError, 'error');
       }
@@ -154,7 +154,7 @@ const UserPost = ({ post, postedBy, posts, setPosts }) => {
                   fontWeight={'bold'}
                   onClick={(e) => {
                     e.preventDefault();
-                    navigate(`/${user.username}`);
+                    navigate(`/${user?.username}`);
                   }}
                 >
                   {user?.username}
@@ -170,7 +170,7 @@ const UserPost = ({ post, postedBy, posts, setPosts }) => {
                   {formatDistanceToNow(new Date(post?.createdAt))} ago
                 </Text>
 
-                {currentUser?._id === user._id && (
+                {currentUser?._id === user?._id && (
                   <DeleteIcon size={20} onClick={handleAlert} />
                 )}
               </Flex>

@@ -38,7 +38,7 @@ const UserFollowers = ({ user, currentUser }) => {
               {user?.followers?.map((followerItem) => (
                 <UserFollower
                   currentUser={currentUser}
-                  key={user._id}
+                  key={user?._id}
                   userID={followerItem}
                 />
               ))}

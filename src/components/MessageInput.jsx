@@ -41,7 +41,7 @@ const MessageInput = ({ setMessages }) => {
 
     const data = await postData('/api/messages', {
       message: messageText,
-      recipientId: selectedConversation.userId,
+      recipientId: selectedConversation?.userId,
       img: imgUrl,
     });
 
@@ -49,7 +49,7 @@ const MessageInput = ({ setMessages }) => {
       setMessages((messages) => [...messages, data?.newMessage]);
       setConversations((prevConvs) => {
         const updatedConversations = prevConvs.map((conversation) => {
-          if (conversation._id === selectedConversation._id) {
+          if (conversation?._id === selectedConversation?._id) {
             return {
               ...conversation,
               lastMessage: {

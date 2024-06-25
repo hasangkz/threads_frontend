@@ -53,7 +53,7 @@ const UserHeader = ({ user }) => {
   const handleFollow = async (e) => {
     e.preventDefault();
 
-    const data = await follow(`/api/users/follow/${user._id}`);
+    const data = await follow(`/api/users/follow/${user?._id}`);
     if (data?.message) {
       setFollowing(!following);
       user?.followers?.push(currentUser?._id);
@@ -68,7 +68,7 @@ const UserHeader = ({ user }) => {
   const handleUnFollow = async (e) => {
     e.preventDefault();
 
-    const data = await unFollow(`/api/users/unfollow/${user._id}`);
+    const data = await unFollow(`/api/users/unfollow/${user?._id}`);
     if (data?.message) {
       setFollowing(!following);
       user?.followers?.pop();

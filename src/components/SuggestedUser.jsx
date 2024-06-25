@@ -35,7 +35,7 @@ const SuggestedUser = ({ user }) => {
   };
 
   const handleUnFollow = async () => {
-    const data = await unFollow(`/api/users/unfollow/${user._id}`);
+    const data = await unFollow(`/api/users/unfollow/${user?._id}`);
     if (data?.message) {
       setFollowing(!following);
       user?.followers?.pop();

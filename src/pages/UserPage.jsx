@@ -80,7 +80,7 @@ const UserPage = () => {
             <UserPost
               posts={posts}
               setPosts={setPosts}
-              key={post._id}
+              key={post?._id}
               post={post}
               postedBy={post.postedBy}
             />
