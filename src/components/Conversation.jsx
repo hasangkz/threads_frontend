@@ -80,8 +80,8 @@ const Conversation = ({ conversation, isOnline }) => {
           ) : (
             ''
           )}
-          {lastMessage?.text?.length > 20
-            ? lastMessage?.text.substring(0, 20) + '...'
+          {lastMessage?.text?.length > 18
+            ? lastMessage?.text.substring(0, 18) + '...'
             : lastMessage?.text || (
                 <Text fontStyle={'italic'}>{user?.name}</Text>
               )}
