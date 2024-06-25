@@ -57,7 +57,6 @@ const UserHeader = ({ user }) => {
     if (data?.message) {
       setFollowing(!following);
       user?.followers?.push(currentUser?._id);
-
       handleToast('Success', data?.message, 'success');
     } else if (error) {
       handleToast('Error', error, 'error');
@@ -80,14 +79,18 @@ const UserHeader = ({ user }) => {
     }
   };
 
+  const handleShowInstagram = async (url) => {
+    window.open(url, '_blank');
+  };
+
   const handleFreezeAccount = async () => {
     const data = await postData(`/api/users/freeze/${currentUser?._id}`);
     if (data && data?.success) {
       onClose();
       await logout();
       handleToast('Success', 'Account has been frozen!', 'success');
-    } else if (error) {
-      handleToast('Error', error, 'error');
+    } else if (postError) {
+      handleToast('Error', postError, 'error');
       return;
     }
   };
@@ -183,7 +186,15 @@ const UserHeader = ({ user }) => {
 
           <Flex>
             <Box className='icon-container'>
-              <BsInstagram size={24} cursor={'pointer'} />
+              <BsInstagram
+                size={24}
+                cursor={'pointer'}
+                onClick={() =>
+                  handleShowInstagram(
+                    `https://www.instagram.com/${user?.username}`
+                  )
+                }
+              />
             </Box>
             <Box className='icon-container' onClick={handleCopyUser}>
               <RiShareForwardLine size={24} cursor={'pointer'} />
@@ -191,26 +202,14 @@ const UserHeader = ({ user }) => {
           </Flex>
         </Flex>
 
-        <Flex justifyContent={'space-between'} w={'full'}>
-          <Flex
-            flex={1}
-            borderBottom={'1px solid white'}
-            justifyContent={'center'}
-            pb={4}
-            cursor={'pointer'}
-          >
-            <Text fontWeight={'bold'}>Threads</Text>
-          </Flex>
-
-          <Flex
-            flex={1}
-            borderBottom={'1px solid white'}
-            justifyContent={'center'}
-            pb={4}
-            cursor={'pointer'}
-          >
-            <Text fontWeight={'bold'}>Replies</Text>
-          </Flex>
+        <Flex
+          w={'full'}
+          flex={1}
+          borderBottom={'1px solid white'}
+          justifyContent={'center'}
+          pb={4}
+        >
+          <Text fontWeight={'bold'}>Threads</Text>
         </Flex>
       </VStack>
       <AlertDialog

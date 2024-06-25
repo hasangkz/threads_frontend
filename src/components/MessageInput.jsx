@@ -34,7 +34,6 @@ const MessageInput = ({ setMessages }) => {
   const { onClose } = useDisclosure();
   const { handleImageChange, imgUrl, setImgUrl } = useHandleImage();
   const { loading, error, postData } = usePostFetch();
-
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!messageText && !imgUrl) return;

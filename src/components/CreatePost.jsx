@@ -27,7 +27,7 @@ import postsAtom from '../atoms/postsAtom';
 import { useParams } from 'react-router-dom';
 import usePostFetch from '../hooks/usePostFetch';
 
-const MAX_CHAR = 120;
+const MAX_CHAR = 140;
 
 const CreatePost = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

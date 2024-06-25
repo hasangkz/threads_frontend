@@ -49,7 +49,7 @@ const UserPage = () => {
   }
 
   return (
-    <>
+    <Flex flexDir={'column'}>
       <UserHeader user={user} />
       <br />
       {posts?.length === 0 ? (
@@ -87,7 +87,7 @@ const UserPage = () => {
           ))}
         </>
       )}
-    </>
+    </Flex>
   );
 };
 

@@ -43,22 +43,24 @@ const HomePage = () => {
   }
 
   return (
-    <Flex gap='10' alignItems={'flex-start'}>
-      <Box flex={70}>
-        {posts?.map((post) => (
-          <UserPost key={post?._id} post={post} postedBy={post?.postedBy} />
-        ))}
-      </Box>
-      <Box
-        flex={30}
-        display={{
-          base: 'none',
-          md: 'block',
-        }}
-      >
-        <Suggest />
-      </Box>
-    </Flex>
+    <>
+      <Flex gap='20' alignItems={'flex-start'}>
+        <Box flex={70}>
+          {posts?.map((post) => (
+            <UserPost key={post?._id} post={post} postedBy={post?.postedBy} />
+          ))}
+        </Box>
+        <Box
+          flex={30}
+          display={{
+            base: 'none',
+            md: 'block',
+          }}
+        >
+          <Suggest />
+        </Box>
+      </Flex>
+    </>
   );
 };
 

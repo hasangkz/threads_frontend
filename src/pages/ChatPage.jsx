@@ -42,7 +42,7 @@ const ChatPage = () => {
             return {
               ...conversation,
               lastMessage: {
-                ...conversation.lastMessage,
+                ...conversation?.lastMessage,
                 seen: true,
               },
             };
@@ -73,8 +73,6 @@ const ChatPage = () => {
       const searchedUser = await getData(`/api/users/profile/${searchText}`);
       setSearchText('');
       if (searchedUser && searchedUser?.user) {
-        console.log('searchedUser', searchedUser);
-
         const messagingYourself = searchedUser?.user?._id === currentUser?._id;
 
         if (messagingYourself) {
@@ -89,7 +87,6 @@ const ChatPage = () => {
         );
 
         if (conversationAlreadyExists) {
-          console.log('zaten var');
           setSelectedConversation({
             _id: conversationAlreadyExists._id,
             userId: searchedUser?.user?._id,
@@ -98,8 +95,6 @@ const ChatPage = () => {
           });
           return;
         }
-
-        console.log('yeni oluşturuluyor');
 
         const mockConversation = {
           mock: true,
