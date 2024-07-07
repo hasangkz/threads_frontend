@@ -9,7 +9,7 @@ I wanted to make the application myself to better understand why the Threads app
 This file belongs only to the frontend side.
 
 **Frontend:** React, recoil, Chakra, react-router-dom, socket.io, react-icons
-**Backend:** https://github.com/hasangkz/backend_threads
+**Backend:** Node.js, Express.js MongoDB (https://github.com/hasangkz/backend_threads)
 
 ## Starting the application
 
